@@ -1,3 +1,4 @@
+import json
 from kivy.app import App
 from splitwise import Splitwise
 import webbrowser
@@ -13,8 +14,6 @@ class Communicator:
         self._last_request_time = 0
 
     def auth(self, url):
-        #scope = ' '.join(args)
-
         params = {
             'response_type': 'code',
             'client_id': self.client_id,
@@ -47,6 +46,8 @@ oauth_verifier = verifier
 
 access_token = sObj.getAccessToken(oauth_token[0], secret, oauth_verifier[0])
 
-sObj.getCurrentUser()
+x = sObj.getCurrentUser()
+
+y = json.dumps(x)
 
 print('hello')
