@@ -2,12 +2,13 @@ import json
 import time
 from requests import get, post
 import keys
+import data_extraction as de
 
 # Endpoint URL
 endpoint = keys.endpoint
 apim_key = keys.key1
 post_url = endpoint + "/formrecognizer/v2.1/prebuilt/receipt/analyze"
-source = r"test_foto2.jpg"
+source = r"zbyszektest.jpg"
 
 headers = {
     # Request headers
@@ -48,6 +49,12 @@ while n_try < n_tries:
         status = resp_json["status"]
         if status == "succeeded":
             print("Receipt Analysis succeeded:\n%s" % json.dumps(resp_json, indent=2, sort_keys=True))
+            processed_data = de.Data_Processor(resp_json)
+            receipt = de.Receipt()
+            for item in processed_data.item_list:
+                receipt.add_item(item)
+            receipt.add_total_price(processed_data.total_price)
+            print(receipt)
             quit()
         if status == "failed":
             print("Analysis failed:\n%s" % resp_json)
