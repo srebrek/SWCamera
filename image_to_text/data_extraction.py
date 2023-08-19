@@ -1,12 +1,3 @@
-import json
-
-# file = open('jasiu.txt', 'r')
-# file_temp = file.read()
-# file.close()
-# file_temp = file_temp.replace("\'", "\"")
-# data_dict = json.loads(file_temp)
-
-
 class Receipt:
     def __init__(self):
         self.items = []
@@ -57,7 +48,7 @@ class ReceiptItem:
 # Total Price
 # print(data_dict['analyzeResult']['documentResults'][0]['fields']['Total']['valueNumber']
 
-class Data_Processor:
+class DataProcessor:
     def __init__(self, data_dict):
         self.total_price = data_dict['analyzeResult']['documentResults'][0]['fields']['Total']['valueNumber']
         path = data_dict['analyzeResult']['documentResults'][0]['fields']['Items']['valueArray']
@@ -71,11 +62,3 @@ class Data_Processor:
                 })
             except KeyError:
                 pass
-
-
-# processed_data = Data_Processor(data_dict)
-# receipt = Receipt()
-# for item in processed_data.item_list:
-#     receipt.add_item(item)
-# receipt.add_total_price(processed_data.total_price)
-# print(receipt)

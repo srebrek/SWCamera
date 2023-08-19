@@ -49,7 +49,7 @@ while n_try < n_tries:
         status = resp_json["status"]
         if status == "succeeded":
             print("Receipt Analysis succeeded:\n%s" % json.dumps(resp_json, indent=2, sort_keys=True))
-            processed_data = de.Data_Processor(resp_json)
+            processed_data = de.DataProcessor(resp_json)
             receipt = de.Receipt()
             for item in processed_data.item_list:
                 receipt.add_item(item)
