@@ -1,9 +1,9 @@
-import json
 from splitwise import Splitwise
 import webbrowser
 import requests
 import urllib.parse
 from http.server import HTTPServer, BaseHTTPRequestHandler
+import oauth_authorization_keys.splitwise_keys as splitwise_keys
 
 
 class Communicator:
@@ -15,7 +15,7 @@ class Communicator:
     def auth(self, url):
         params = {
             'response_type': 'code',
-            'client_id': '',
+            'client_id': splitwise_keys.CONSUMER_KEY,
             'redirect_uri': self._redirect_uri
         }
         request = requests.Request('GET', url, params).prepare()
@@ -35,18 +35,14 @@ class RequestHandler(BaseHTTPRequestHandler):
         verifier = query['oauth_verifier']
 
 
-tempRequest = Communicator()
+def get_access_key():
+    tempRequest = Communicator()
 
-sObj = Splitwise('', '')
-url, secret = sObj.getAuthorizeURL()
-tempRequest.auth(url)
-oauth_token = token
-oauth_verifier = verifier
+    sObj = Splitwise(splitwise_keys.CONSUMER_KEY, splitwise_keys.CONSUMER_SECRET)
+    url, secret = sObj.getAuthorizeURL()
+    tempRequest.auth(url)
+    oauth_token = token
+    oauth_verifier = verifier
 
-access_token = sObj.getAccessToken(oauth_token[0], secret, oauth_verifier[0])
-sObj.setAccessToken(access_token)
-x = sObj.getCurrentUser()
-
-name = x.first_name
-
-print(name)
+    access_token = sObj.getAccessToken(oauth_token[0], secret, oauth_verifier[0])
+    return access_token
