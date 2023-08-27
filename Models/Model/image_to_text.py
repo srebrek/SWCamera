@@ -8,7 +8,7 @@ from Models.Model import data_extraction as de
 endpoint = azure_keys.endpoint
 apim_key = azure_keys.key1
 post_url = endpoint + "/formrecognizer/v2.1/prebuilt/receipt/analyze"
-source = r"image_to_text_resources/zbyszektest.jpg"
+source = r"image_to_text_resources/test_foto2.jpg"
 
 headers = {
     # Request headers
