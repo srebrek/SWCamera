@@ -1,0 +1,30 @@
+<Button>:
+    font_size: 40
+    color: 29, 40, 145, 0.8
+    background_color: 0.639, 0, 0.62, 1
+
+<LoginWindow>:
+    name: "Login"
+
+
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        GridLayout:
+            cols: 2
+            Label:
+                text: "UserId"
+            TextInput:
+                multiline: False
+            Label:
+                text: "Password"
+            TextInput:
+                multiline: False
+                password: True
+
+        Button:
+            text: "Submit"
+        Button:
+            text: "Login by SplitWise"
+            on_release:
+                root.loginSplitWise()

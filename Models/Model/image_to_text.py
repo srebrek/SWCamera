@@ -1,14 +1,14 @@
 import json
 import time
 from requests import get, post
-import image_to_text_resources.azure_keys as azure_keys
+#import image_to_text_resources.azure_keys as azure_keys
 from Models.Model import data_extraction as de
 
 # Endpoint URL
-endpoint = azure_keys.endpoint
-apim_key = azure_keys.key1
+endpoint = 'https://recognizerreceipt21.cognitiveservices.azure.com/'
+apim_key = ''#azure_keys.key1
 post_url = endpoint + "/formrecognizer/v2.1/prebuilt/receipt/analyze"
-source = r"image_to_text_resources/zbyszektest.jpg"
+source = r"image_to_text_resources/paragon.jpg"
 
 headers = {
     # Request headers
