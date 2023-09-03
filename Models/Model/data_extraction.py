@@ -2,6 +2,7 @@ class Receipt:
     def __init__(self):
         self.items = []
         self.total_price = 0
+        self.receipt_members = None
 
     def __str__(self):
         receipt_string = f''
@@ -19,8 +20,21 @@ class Receipt:
         )
         self.items.append(item)
 
-    def add_total_price(self, total_price):
+    def set_total_price(self, total_price):
         self.total_price = total_price
+
+    def set_receipt_members(self, receipt_members):
+        self.receipt_members = receipt_members
+
+    def set_payer(self, payer):
+        payer.setPaidShare(self.total_price)
+        """total_price mustn't be 0"""
+
+    def set_detail_message(self):
+        message = f''
+        for item in self.items:
+            message += item.set_detail_message()
+        return message
 
 
 class ReceiptItem:
@@ -28,9 +42,46 @@ class ReceiptItem:
         self.name = name
         self.price = price
         self.quantity = quantity
+        self.involved = []
+        self.total_price = price * quantity
+        self.group_members_number = None
 
     def __str__(self):
         return f'{self.name}: {self.quantity} * {self.price}'
+
+    def set_involved(self, involved_list):
+        self.involved = involved_list
+
+    def add_involved(self, involved):
+        self.involved.append(involved)
+
+    def split_equally(self):
+        number_of_involved = len(self.involved)
+        cost = self.total_price
+        i = 0
+        while i < number_of_involved:
+            while cost % number_of_involved != 0:
+                self.involved[i].setOwedShare(
+                    self.involved[i].getOwedShare() + (cost // number_of_involved + 1))
+                i += 1
+                cost -= 1
+
+            self.involved[i].setOwedShare(
+                self.involved[i].getOwedShare() + (cost // number_of_involved))
+            i += 1
+
+    def set_group_members_number(self, group_members):
+        self.group_members_number = len(group_members)
+
+    def set_detail_message(self):
+        nl = '\n'
+        message = f'{self.name}: {self.quantity} * {self.price} split between ->{nl}'
+        if self.group_members_number == len(self.involved):
+            message += f'everyone{nl}'
+        else:
+            for member in self.involved:
+                message += f'{member.getFirstName()}{nl}'
+        return message
 
 
 # Item name

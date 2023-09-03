@@ -53,7 +53,7 @@ while n_try < n_tries:
             receipt = de.Receipt()
             for item in processed_data.item_list:
                 receipt.add_item(item)
-            receipt.add_total_price(processed_data.total_price)
+            receipt.set_total_price(processed_data.total_price)
             print(receipt)
             quit()
         if status == "failed":
