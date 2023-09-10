@@ -2,8 +2,10 @@ from splitwise import Splitwise
 import webbrowser
 import requests
 import urllib.parse
+import os
+import json
 from http.server import HTTPServer, BaseHTTPRequestHandler
-import oauth_authorization_keys.splitwise_keys as splitwise_keys
+import Models.Model.oauth_authorization_keys.splitwise_keys as splitwise_keys
 
 
 class Communicator:
@@ -46,3 +48,19 @@ def get_access_key():
 
     access_token = sObj.getAccessToken(oauth_token[0], secret, oauth_verifier[0])
     return access_token
+
+
+def save_access_key():
+
+    PATH = 'Models/Model/access_key.json'
+    access_key = None
+
+    if os.stat(PATH).st_size == 0:
+        access_key = get_access_key()
+        with open(PATH, 'w') as file:
+            json.dump(access_key, file)
+    else:
+        with open(PATH, 'r') as file:
+            access_key = json.load(file)
+
+    return access_key
