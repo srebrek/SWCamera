@@ -36,6 +36,29 @@ class Receipt:
             message += item.set_detail_message()
         return message
 
+    def check_data_correctness(self):
+        item_sum = 0
+        for item in self.items:
+            item_sum += item.total_price
+        while item_sum != self.total_price:
+            counter = 0
+            for item in self.items:
+                print(f'{counter}. {item.name}: {item.quantity} * {item.price}')
+                counter += 1
+            incorrect_item_number = int(input('Select incorrect item: '))
+            incorrect_data = int(input('Select incorrect data (0 - Name, 1 - Quantity, 2 - Price: '))
+            if incorrect_data == 0:
+                self.items[incorrect_item_number].name = input('Insert correct Name: ')
+            elif incorrect_data == 1:
+                self.items[incorrect_item_number].quantity = int(input('Insert correct Quantity: '))
+                self.items[incorrect_item_number].update_total_price()
+            elif incorrect_data == 2:
+                self.items[incorrect_item_number].price = int(input('Insert correct Price: '))
+                self.items[incorrect_item_number].update_total_price()
+            item_sum = 0
+            for item in self.items:
+                item_sum += item.total_price
+
 
 class ReceiptItem:
     def __init__(self, name, price, quantity):
@@ -48,6 +71,9 @@ class ReceiptItem:
 
     def __str__(self):
         return f'{self.name}: {self.quantity} * {self.price}'
+
+    def update_total_price(self):
+        self.total_price = self.price * self.quantity
 
     def set_involved(self, involved_list):
         self.involved = involved_list

@@ -17,11 +17,13 @@ def friend_list_to_expense_user_list(friend_list):
     return expense_user_list
 
 
-splitwise_object = splitwise.Splitwise(
-    splitwise_keys.CONSUMER_KEY,
-    splitwise_keys.CONSUMER_SECRET,
-    splitwise_keys.ACCESS_KEY
-)
+def make_splitwise_object(access_key):
+    splitwise_object = splitwise.Splitwise(
+        splitwise_keys.CONSUMER_KEY,
+        splitwise_keys.CONSUMER_SECRET,
+        access_key
+    )
+    return splitwise_object
 
 # test_receipt = de.Receipt()
 # test_receipt.add_item({'Name': 'item0', 'Price': 1000, 'Quantity': 1})
@@ -57,13 +59,29 @@ splitwise_object = splitwise.Splitwise(
 #
 # test_receipt.set_payer(test_receipt.receipt_members[0])
 #
-# test_expense = splitwise.expense.Expense()
-# test_expense.setGroupId(test_group_id)
-# test_expense.setDescription('testing_extended_classes')
-# test_expense.setCost(test_receipt.total_price)
-# test_expense.setUsers(test_receipt.receipt_members)
-# message = test_receipt.set_detail_message()
-# test_expense.setDetails(test_receipt.set_detail_message())
+
+
+def int_pln_to_string_pln(int_price):
+    int_price = str(int_price)
+    price_len = len(int_price)
+    zl = int_price[:price_len - 2]
+    gr = int_price[price_len - 2:]
+    price_string = f'{zl}.{gr}'
+    return price_string
+
+
+def make_expense(group_id, receipt):
+    receipt.total_price = int_pln_to_string_pln(receipt.total_price)
+    for member in receipt.receipt_members:
+        member.owed_share = int_pln_to_string_pln(member.owed_share)
+        member.paid_share = int_pln_to_string_pln(member.paid_share)
+    expense = splitwise.expense.Expense()
+    expense.setGroupId(group_id)
+    expense.setDescription('testing_extended_classes')
+    expense.setCost(receipt.total_price)
+    expense.setUsers(receipt.receipt_members)
+    expense.setDetails(receipt.set_detail_message())
+    return expense
 #
 # x = splitwise_object.getExpenses(visible=True, group_id=test_group_id)
 #
